@@ -205,21 +205,31 @@ Action ComportamientoJugador::think(Sensores sensores) {
 			current_state.brujula = static_cast<Orientacion>(a);
 			break;
 	}
-//	if (sensores.terreno[0]=='G' and !bien_situado){
+	//cuando está en nivel 0....
 	if (sensores.posF!=-1 and !bien_situado){
 		current_state.fil = sensores.posF;
 		current_state.col= sensores.posC;
 		current_state.brujula = sensores.sentido;
 		bien_situado = true;
 	}
-	
+	if(sensores.terreno[0] == 'K'){
+		tieneBikini = true;
+		cout << "tengo bikini\n";
+	}
+	if(sensores.terreno[0] == 'D'){
+		tieneZapas = true;
+	}
 	if(bien_situado){
 		PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
 	}
 	//detecta una nueva acción
-	if((sensores.terreno[2] == 'T' || sensores.terreno[2] != 'S') && sensores.agentes[2] == '_' && sensores.terreno[2] != 'P'){
+	if((sensores.terreno[2] == 'T' ||  sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'K' || sensores.terreno[2] == 'D') && sensores.agentes[2] == '_' && sensores.terreno[2] != 'P'){
 		accion = actWALK;
 	}
+	else if(tieneBikini && sensores.terreno[2] == 'A')
+		accion = actWALK;
+	else if(tieneZapas && sensores.terreno[2] == 'B')
+		accion = actWALK;
 	else if(!girar_derecha){
 		accion = actTURN_L;
 		girar_derecha = (rand()%2 == 0);

@@ -27,6 +27,15 @@ class ComportamientoJugador : public Comportamiento{
 		    }
 	    }
     }
+      /* Esto para que vaya guardando las cosas cuando no esté bien posicionado y se lo pase a mapaResultado cuando ya si este posicionado.
+      
+      for(int i = 0; i < size;i++){
+        for(int j = 0 ; j < size; j++){
+          mapaResultado[i][j] = mapaGenerado[i][j];
+        }
+      }
+      */
+    
 
     ComportamientoJugador(const ComportamientoJugador & comport) : Comportamiento(comport){}
     ~ComportamientoJugador(){}
@@ -42,7 +51,8 @@ class ComportamientoJugador : public Comportamiento{
   Action last_action;
   bool girar_derecha = false;
   bool bien_situado = false;
-  bool bordes;
+  bool tieneBikini = false;
+  bool tieneZapas = false;
   unsigned int tamMapa;
 };
 #endif
