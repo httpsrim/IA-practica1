@@ -27,20 +27,15 @@ class ComportamientoJugador : public Comportamiento{
 		    }
 	    }
     }
-      /* Esto para que vaya guardando las cosas cuando no esté bien posicionado y se lo pase a mapaResultado cuando ya si este posicionado.
-      
-      for(int i = 0; i < size;i++){
-        for(int j = 0 ; j < size; j++){
-          mapaResultado[i][j] = mapaGenerado[i][j];
-        }
-      }
-      */
-    
 
     ComportamientoJugador(const ComportamientoJugador & comport) : Comportamiento(comport){}
     ~ComportamientoJugador(){}
     //Función para poner el terreno en matriz
     void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
+    //Cuando se orienta poner lo que se ha visitado sin saber su orientacion
+    void PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, vector<vector<unsigned char>> &mapaAux, unsigned int size);
+    //Busca una casilla de "orientacion"
+    Action buscarOrientacion(Sensores &sensores);
     Action think(Sensores sensores);
     int interact(Action accion, int valor);
 
@@ -53,6 +48,5 @@ class ComportamientoJugador : public Comportamiento{
   bool bien_situado = false;
   bool tieneBikini = false;
   bool tieneZapas = false;
-  unsigned int tamMapa;
 };
 #endif

@@ -2,6 +2,25 @@
 #include <iostream>
 using namespace std;
 
+Action ComportamientoJugador::buscarOrientacion(Sensores &sensores){
+	Action accion;
+	if(sensores.terreno[1] == 'G' || sensores.terreno[4] == 'G' || sensores.terreno[9] == 'G' || sensores.terreno[10] == 'G' || sensores.terreno[11] == 'G')
+		accion = actTURN_L;
+	else if(sensores.terreno[3] == 'G' || sensores.terreno[7] == 'G' || sensores.terreno[8] == 'G' || sensores.terreno[14] == 'G' || sensores.terreno[15] == 'G')	
+		accion = actTURN_SR;
+	else if(sensores.terreno[2] == 'G' || sensores.terreno[6] == 'G' || sensores.terreno[12] == 'G')		
+		accion = actWALK;
+	else 
+		accion = actIDLE;
+	return accion;
+}
+void ComportamientoJugador::PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, vector<vector<unsigned char>> &mapaAux, unsigned int size){
+	for(int i = 0; i < size;i++){
+        for(int j = 0 ; j < size; j++){
+          mapaResultado[i][j] = mapaAux[i][j];
+        }
+      }
+}
 void ComportamientoJugador::PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz){
 	switch (current_state.brujula){						//Dibuja el rango que ve el jugador dependiendo del sentido
 	case norte:
@@ -219,11 +238,14 @@ Action ComportamientoJugador::think(Sensores sensores) {
 	if(sensores.terreno[0] == 'D'){
 		tieneZapas = true;
 	}
+	if(!bien_situado){
+		buscarOrientacion(sensores);
+	}
 	if(bien_situado){
 		PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
 	}
 	//detecta una nueva acción
-	if((sensores.terreno[2] == 'T' ||  sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'K' || sensores.terreno[2] == 'D') && sensores.agentes[2] == '_' && sensores.terreno[2] != 'P'){
+	if((sensores.terreno[2] == 'T' ||  sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'K' || sensores.terreno[2] == 'D') && sensores.agentes[2] == '_'){
 		accion = actWALK;
 	}
 	else if(tieneBikini && sensores.terreno[2] == 'A')
