@@ -27,13 +27,17 @@ class ComportamientoJugador : public Comportamiento{
 		    }
 	    }
     }
+    
 
     ComportamientoJugador(const ComportamientoJugador & comport) : Comportamiento(comport){}
     ~ComportamientoJugador(){}
-    //Función para poner el terreno en matriz
+    //funcion para reiniciar
+    void reinicio(int &fil, int &col,state &st, bool &girarDerecha, bool &orientado, Sensores &sensores);    
+    Action girar();
+   //Función para poner el terreno en matriz
     void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
-    //Cuando se orienta poner lo que se ha visitado sin saber su orientacion
-    void PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, vector<vector<unsigned char>> &mapaAux, unsigned int size);
+    //Cuando no se orienta poner lo que se ha visitado sin saber su orientacion
+    void PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, vector<vector<unsigned char>> &mapaAux);
     //Busca una casilla de "orientacion"
     Action buscarOrientacion(Sensores &sensores);
     Action think(Sensores sensores);
@@ -41,6 +45,9 @@ class ComportamientoJugador : public Comportamiento{
 
   private:
   // Declarar aquí las variables de estado
+  //int mapaAux[200][200]; 
+  //vector<vector<unsigned char>> mapaAux;
+  int instante;
   state current_state;
   Orientacion brujula;
   Action last_action;
