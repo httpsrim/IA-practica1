@@ -24,6 +24,10 @@ class ComportamientoJugador : public Comportamiento{
       }
       for(int i = 0; i < size; i++){
 		    for(int j = 0; j < 3; j++){
+          mapaResultado[i][j] = 'P';
+			    mapaResultado[i][size-j-1] = 'P';
+			    mapaResultado[j][i] = 'P';
+			    mapaResultado[size-j-1][i] = 'P';
           mapaAux[i][j] = 'P';
 			    mapaAux[i][size-j-1] = 'P';
 			    mapaAux[j][i] = 'P';
@@ -38,9 +42,9 @@ class ComportamientoJugador : public Comportamiento{
     void reinicio(int &fil, int &col,state &st, bool &girarDerecha, bool &orientado, Sensores &sensores, vector<vector<unsigned char>> &mapa);    
     Action girar();
    //Función para poner el terreno en matriz
-    void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
+    void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, const int nivel);
        //Función para poner el terreno en matriz Aux
-    void PonerTerrenoEnMatrizAux(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
+    void PonerTerrenoEnMatrizAux(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, const int nivel);
     //Cuando no se orienta poner lo que se ha visitado sin saber su orientacion
     void PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, const state &st, vector<vector<unsigned char>> &mapaAux);
     //Busca una casilla de "orientacion"
