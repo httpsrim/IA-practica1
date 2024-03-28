@@ -4,12 +4,13 @@ using namespace std;
 
 Action ComportamientoJugador::buscarOrientacion(Sensores &sensores){
 	Action accion;
-	if(sensores.terreno[1] == 'G' ||sensores.terreno[4] == 'G' || sensores.terreno[9] == 'G' || sensores.terreno[10] == 'G' || sensores.terreno[11] == 'G'){
+	if(sensores.terreno[1] == 'G'){
 		accion = actTURN_L;
 		cout << "he visto una G" << endl;
 	//	char ch; cin >> ch;	
-	}	//else if(necesitoGirar){		accion = actTURN;		necesitoGirar = false;	}
-	else if(sensores.terreno[3] == 'G' || sensores.terreno[7] == 'G' || sensores.terreno[8] == 'G' || sensores.terreno[14] == 'G' || sensores.terreno[15] == 'G')	
+	}
+	/*else if(necesitoGirar){		accion = actTURN_SR;		necesitoGirar = false;	}
+	*/else if(sensores.terreno[3] == 'G' || sensores.terreno[7] == 'G' || sensores.terreno[8] == 'G' || sensores.terreno[14] == 'G' || sensores.terreno[15] == 'G')	
 		accion = actTURN_SR;
 	else if(sensores.terreno[2] == 'G' || sensores.terreno[6] == 'G' || sensores.terreno[12] == 'G')		
 		accion = actWALK;
@@ -21,9 +22,11 @@ Action ComportamientoJugador::buscarOrientacion(Sensores &sensores){
 void ComportamientoJugador::PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, const state &st, vector<vector<unsigned char>> &mapaAux){
 	for(int i = 0; i < mapaResultado.size();i++){
 		for(int j = 0; j < mapaResultado.size();j++){
-			if(mapaAux[st.fil+i][st.col+j] != '?'){
-				mapaResultado[i][j] = mapaAux[st.fil+i][st.col+j];
-			}
+	/*		if(mapaAux[st.fil+i][st.col+j] != '?' && mapaResultado[i][j] == '?'){
+				mapaResultado[i][j] = mapaAux[i][j];
+			}*/
+			if(!mapaAux[i][j]=='?' and mapaAux[i][j]!=mapaResultado[i][j])
+				mapaResultado[st.fil][st.col]=mapaAux[i][j];
 		}
 	}
 }
@@ -420,8 +423,8 @@ Action ComportamientoJugador::think(Sensores sensores) {
 	}
 	//cuando está en nivel 0....
 	if (sensores.posF!=-1 and !bien_situado){
-		current_state.fil -= sensores.posF;
-		current_state.col -= sensores.posC;
+		filR = current_state.fil - sensores.posF;
+		colR = current_state.col - sensores.posC;
 		cout << current_state.fil << " , " << current_state.col << endl;
 		PonerTerrenoEnMapa(mapaResultado,current_state,mapaAux);
 		/*

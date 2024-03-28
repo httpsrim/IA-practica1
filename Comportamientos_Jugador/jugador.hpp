@@ -57,6 +57,7 @@ class ComportamientoJugador : public Comportamiento{
  
 	vector<vector<unsigned char>> mapaAux;
   int instante;
+  int filR = 0, colR = 0;
   state current_state;
   Orientacion brujula;
   Action last_action;
