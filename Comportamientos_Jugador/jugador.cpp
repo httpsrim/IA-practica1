@@ -14,6 +14,9 @@ int ComportamientoJugador::costeCasilla(Sensores &sensores){
 		case 'T':
 			return 2;
 			break;
+		case 'P': case 'M':
+			return 100000;
+			break;
 		default:
 			return 1;
 			break;
@@ -570,6 +573,28 @@ Action ComportamientoJugador::think(Sensores sensores) {
 			accion = actWALK;
 		else if(tieneZapas && sensores.terreno[2] == 'B')
 			accion = actWALK;
+		else if(sensores.terreno[0] == 'B' && !tieneZapas){
+			tiempoEspera++;
+			accion = actTURN_SR;
+			if(tiempoEspera>3){
+				if(sensores.terreno[2] != 'P' || sensores.terreno[2] != 'M'){
+					accion = actWALK;
+					tiempoEspera = 0;
+				}
+				else accion = actTURN_SR;
+			}
+		}
+		else if(sensores.terreno[0] == 'A' && !tieneBikini){
+			tiempoEspera++;
+			accion = actTURN_SR;
+			if(tiempoEspera>3){
+				if(sensores.terreno[2] != 'P' || sensores.terreno[2] != 'M'){
+					accion = actWALK;
+					tiempoEspera = 0;
+				}
+				else accion = actTURN_SR;
+			}
+		}
 		else if(!girar_derecha){
 			accion = actTURN_L;
 			girar_derecha = (rand()%2 == 0);
@@ -610,6 +635,7 @@ Action ComportamientoJugador::think(Sensores sensores) {
 		}
 	}
 	if(sensores.colision){
+		if(sensores.terreno[2] == 'M'){
 		if(!girar_derecha){
 			accion = actTURN_L;
 			
@@ -622,6 +648,10 @@ Action ComportamientoJugador::think(Sensores sensores) {
 		else{
 			accion = actTURN_SR;
 			girar_derecha = (rand()%2 == 0);
+		}
+		}
+		else{
+			accion = actWALK;
 		}
 	}
 	

@@ -57,8 +57,13 @@ class ComportamientoJugador : public Comportamiento{
     void PonerTerrenoEnMapa(vector<vector<unsigned char>> &mapaResultado, const state &st, vector<vector<unsigned char>> &mapaAux, int fil, int col);
     //Busca una casilla de "orientacion"
     Action buscarOrientacion(Sensores &sensores);
+    //Busca una casilla de "Zapatillas"
+    Action buscarZapas(Sensores &sensores);
+    //Busca una casilla de "bikini"
+    Action buscarBikini(Sensores &sensores);
     //Buscar sin descubrir
     Action buscarSinDescubrir(Sensores &sensores);
+    //devuelve el coste de la casilla
     int costeCasilla(Sensores &sensores);
     Action think(Sensores sensores);
     int interact(Action accion, int valor);
