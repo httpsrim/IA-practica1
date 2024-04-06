@@ -16,26 +16,26 @@ class ComportamientoJugador : public Comportamiento{
     ComportamientoJugador(unsigned int size) : Comportamiento(size){
       current_state.fil = 99;
       current_state.col = 99;
-      current_state.brujula = norte;
       last_action = actIDLE;
-      vector<unsigned char>aux(400,'?');
-      for(int i = 0; i < 400;i++){
+      current_state.brujula = norte;
+      vector<unsigned char>aux(200,'?');
+      vector<int>aux2(200,0);
+      for(int i = 0; i < 200;i++){
         mapaAux.push_back(aux);
+        matrizRotada.push_back(aux);
+        mapaPulgarcito.push_back(aux2);
       }
-      /*for(int i = 0; i < size; i++)
-        for(int j = 0 ; j < 200; j++)
-          mapaPulgarcito[i][j] = 0;
-      */for(int i = 0; i < size; i++){
+      for(int i = 0; i < size; i++){
 		    for(int j = 0; j < 3; j++){
           mapaResultado[i][j] = 'P';
 			    mapaResultado[i][size-j-1] = 'P';
 			    mapaResultado[j][i] = 'P';
 			    mapaResultado[size-j-1][i] = 'P';
-       //   mapaAux[i][j] = 'P';
-			 //   mapaAux[i][size-j-1] = 'P';
-			 //   mapaAux[j][i] = 'P';
-			 //   mapaAux[size-j-1][i] = 'P';
-        }
+        /*  mapaAux[i][j] = 'P';
+			    mapaAux[i][size-j-1] = 'P';
+			    mapaAux[j][i] = 'P';
+			    mapaAux[size-j-1][i] = 'P';
+        */}
 	    }
       instante = 1;
       voyagiraren = 10;
@@ -48,7 +48,8 @@ class ComportamientoJugador : public Comportamiento{
     ~ComportamientoJugador(){}
     //funcion para reiniciar
     void reinicio(int &fil, int &col,state &st, bool &girarDerecha, bool &orientado, Sensores &sensores, vector<vector<unsigned char>> &mapa);    
-    Action girar();
+    //Funcion para poner terreno en nivel 3
+        void PonerTerrenoEnMapaN3(vector<vector<unsigned char>> &mapaResultado, const state &st, vector<vector<unsigned char>> &mapaAux, int fil, int col, int diferencia);
    //Función para poner el terreno en matriz
     void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, const int nivel);
        //Función para poner el terreno en matriz Aux
@@ -70,9 +71,11 @@ class ComportamientoJugador : public Comportamiento{
     
   private:
   // Declarar aquí las variables de estado
+  //vector<vector<unsigned char>> mapaAuxFinal;
   vector<vector<unsigned char>> mapaAux;
+  vector<vector<unsigned char>> matrizRotada;
+  vector<vector<int>> mapaPulgarcito;
   int instante;
-  int mapaPulgarcito[200][200];
   int costeIzq, costeDcho, costeDelante;
   int voyagiraren, voyagiraren2, tiempo;
   int tiempoEspera = 0;

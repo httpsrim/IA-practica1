@@ -71,6 +71,37 @@ void ComportamientoJugador::PonerTerrenoEnMapa(vector<vector<unsigned char>> &ma
 		}
 	}
 }
+void ComportamientoJugador::PonerTerrenoEnMapaN3(vector<vector<unsigned char>> &mapaResultado, const state &st, vector<vector<unsigned char>> &mapaAux, int fil, int col, int diferencia){
+	switch(diferencia){
+		case 2: //este
+			for(int i = 0; i < mapaResultado.size();i++){
+				for(int j = 0; j < mapaResultado.size();j++){
+				if(mapaAux[col+j][fil+i]!='?' and mapaAux[col+j][fil+i] != mapaResultado[i][j])
+					mapaResultado[i][j]=mapaAux[col+j][fil+i];
+				}
+			}
+			break;
+		case 4: //sur
+			for(int i = mapaResultado.size(); i > 0;i--){
+				for(int j = mapaResultado.size(); j > 0;j--){
+				if(mapaAux[mapaResultado.size()-fil+i][mapaResultado.size()-col+j]!='?' and mapaAux[mapaResultado.size()-fil+i][mapaResultado.size()-col+j] != mapaResultado[i][j])
+					mapaResultado[i][j]=mapaAux[mapaResultado.size()-fil+i][mapaResultado.size()-col+j];
+				}
+			}
+			break;
+		case 6: //oeste
+			for(int i = 0; i < mapaResultado.size();i--){
+				for(int j = 0; j < mapaResultado.size();j--){
+				if(mapaAux[mapaResultado.size()-col+j][mapaResultado.size()-fil+i]!='?' and mapaAux[mapaResultado.size()-col+j][mapaResultado.size()-fil+i] != mapaResultado[i][j])
+					mapaResultado[i][j]=mapaAux[mapaResultado.size()-col+j][mapaResultado.size()-fil+i];
+				}
+			}
+			break;
+		default:
+			break;
+	}
+	
+}
 
 void ComportamientoJugador::PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz,const int nivel){
 	switch (current_state.brujula){						//Dibuja el rango que ve el jugador dependiendo del sentido
@@ -376,8 +407,7 @@ if(nivel != 3)		matriz[st.fil + 3][st.col + 2] = terreno[13];
 		break;
 	}
 }
-Action ComportamientoJugador::girar(){
-}
+
 void ComportamientoJugador::reinicio(int &fil, int &col, state &st, bool &girarDerecha, bool &orientado, Sensores &sensores,vector<vector<unsigned char>> &mapa){
 	fil = 99;
 	col = 99;
@@ -400,6 +430,7 @@ Action ComportamientoJugador::think(Sensores sensores) {
 	Action accion = actIDLE;
 	int a;
 	mapaPulgarcito[current_state.fil][current_state.col] = instante;
+    cout << "Instante: " << instante << endl;
 	instante++;
 	tiempo --;
 	voyagiraren --;
@@ -500,11 +531,16 @@ Action ComportamientoJugador::think(Sensores sensores) {
 		PonerTerrenoEnMatrizAux(sensores.terreno,current_state,mapaAux, sensores.nivel);
 	}
 	//cuando está en nivel 0....
-	if (sensores.terreno[0] == 'G' and !bien_situado){
+	if (sensores.posF != -1 and !bien_situado){
 		int fil = current_state.fil - sensores.posF;
 		int col = current_state.col - sensores.posC;
-	//	cout << current_state.fil << " , " << current_state.col << endl;
-		PonerTerrenoEnMapa(mapaResultado,current_state,mapaAux,fil,col);
+		int diferencia = (current_state.brujula - sensores.sentido + 8)%8;
+		cout << diferencia << endl;
+        if (diferencia==0) PonerTerrenoEnMapa(mapaResultado,current_state,mapaAux,fil,col);
+		//if(sensores.nivel != 3) PonerTerrenoEnMapa(mapaResultado,current_state,mapaAux,fil,col);
+		//else if(sensores.nivel == 3 && diferencia == 0) PonerTerrenoEnMapa(mapaResultado,current_state,mapaAux,fil,col);
+		//else PonerTerrenoEnMapaN3(mapaResultado,current_state,mapaAux,fil,col,diferencia);
+
 		current_state.fil = sensores.posF;
 		current_state.col= sensores.posC;
 		current_state.brujula = sensores.sentido;
@@ -533,7 +569,6 @@ Action ComportamientoJugador::think(Sensores sensores) {
 	}
 
 	if(bien_situado){
-
 		PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado, sensores.nivel);
 	}
 	
@@ -554,11 +589,6 @@ Action ComportamientoJugador::think(Sensores sensores) {
 				girar_derecha = (rand()%2 == 0);
 			}
 		}
-		//else if(tiempo == 0){
-		//	accion = buscarSinDescubrir(sensores);
-		//	accion = actTURN_SR;
-		//	tiempo = rand()%20 + 10;
-		//}
 		else accion = actWALK;
 	}
 	//detecta una nueva acción
